@@ -35,13 +35,14 @@ export const setError = payload => ({
   payload,
 })
 
-export const registerUser = (payload, redirectUrl) => async (dispatch) => {
-  try {
-    const { data } = await axios.post('/auth/sign-up', payload)
-    dispatch(registerRequest(data))
-    window.location.href = redirectUrl
-  } catch (error) {
-    console.error(error)
+export const registerUser = (payload, redirectUrl) => {
+  return (dispatch) => {
+    axios.post('/auth/sign-up', payload)
+      .then(({ data }) => dispatch(registerRequest(data)))
+      .then(() => {
+        window.location.href = redirectUrl
+      })
+      .catch(error => dispatch(setError(error)))
   }
 }
 
