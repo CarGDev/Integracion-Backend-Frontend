@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const setFavorite = payload => ({
   type: 'SET_FAVORITE',
   payload,
@@ -33,14 +35,14 @@ export const setError = payload => ({
   payload,
 })
 
-exportconst registerUser = (payload, redirectUrl) => async (dispatch) => {
+export const registerUser = (payload, redirectUrl) => async (dispatch) => {
   try {
-    const { data } = await axios.post('/auth/sign-up', payload);
-    dispatch(registerRequest(data));
-    window.location.href = redirectUrl;
+    const { data } = await axios.post('/auth/sign-up', payload)
+    dispatch(registerRequest(data))
+    window.location.href = redirectUrl
   } catch (error) {
-    console.log(error);
+    console.error(error)
   }
-};
+}
 
 export { setFavorite as default }
