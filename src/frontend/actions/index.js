@@ -1,39 +1,39 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export const setFavorite = payload => ({
   type: 'SET_FAVORITE',
   payload,
-})
+});
 
 export const loginRequest = payload => ({
   type: 'LOGIN_REQUEST',
   payload,
-})
+});
 
 export const logoutRequest = payload => ({
   type: 'LOGOUT_REQUEST',
   payload,
-})
+});
 
 export const registerRequest = payload => ({
   type: 'REGISTER_REQUEST',
   payload,
-})
+});
 
 export const deteleFavorite = payload => ({
   type: 'DELETE_FAVORITE',
   payload,
-})
+});
 
 export const getVideoSource = payload => ({
   type: 'GET_VIDEO_SOURCE',
   payload,
-})
+});
 
 export const setError = payload => ({
   type: 'SET_ERROR',
   payload,
-})
+});
 
 export const registerUser = (payload, redirectUrl) => {
   return (dispatch) => {
@@ -43,8 +43,8 @@ export const registerUser = (payload, redirectUrl) => {
         window.location.href = redirectUrl
       })
       .catch(error => dispatch(setError(error)))
-  }
-}
+  };
+};
 
 export const loginUser = ({ email, password }, redirectUrl) => {
   return (dispatch) => {
@@ -60,7 +60,6 @@ export const loginUser = ({ email, password }, redirectUrl) => {
         document.cookie = `email=${data.user.email}`;
         document.cookie = `name=${data.user.name}`;
         document.cookie = `id=${data.user.id}`;
-        document.cookie = `token=${data.user.token}`
         dispatch(loginRequest(data.user));
       })
       .then(() => {
