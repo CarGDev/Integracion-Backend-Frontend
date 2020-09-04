@@ -1,48 +1,48 @@
 /* eslint-disable func-names */
 /* eslint-disable global-require */
-import express from 'express';
-import dotenv from 'dotenv';
-import helmet from 'helmet';
-import webpack from 'webpack';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
-import { renderRoutes } from 'react-router-config';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from '../frontend/reducers';
-import Layout from '../frontend/components/Layout';
-import initialState from '../frontend/initialState';
-import serverRoutes from '../frontend/routes/serverRoutes';
-import getManifest from './getManifest';
+import express from 'express'
+import dotenv from 'dotenv'
+import helmet from 'helmet'
+import webpack from 'webpack'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom'
+import { renderRoutes } from 'react-router-config'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducer from '../frontend/reducers'
+import Layout from '../frontend/components/Layout'
+import initialState from '../frontend/initialState'
+import serverRoutes from '../frontend/routes/serverRoutes'
+import getManifest from './getManifest'
 
-dotenv.config();
+dotenv.config()
 
-const app = express();
-const { ENV, PORT } = process.env;
+const app = express()
+const { ENV, PORT } = process.env
 
 if (ENV === 'development') {
-  const webPackConfig = require('../../webpack.config');
-  const webpackDevMiddleware = require('webpack-dev-middleware');
-  const webpackHotMiddleware = require('webpack-hot-middleware');
-  const compiler = webpack(webPackConfig);
-  const serverConfig = { port: PORT, hot: true };
-  app.use(webpackDevMiddleware(compiler, serverConfig));
-  app.use(webpackHotMiddleware(compiler));
+  const webPackConfig = require('../../webpack.config')
+  const webpackDevMiddleware = require('webpack-dev-middleware')
+  const webpackHotMiddleware = require('webpack-hot-middleware')
+  const compiler = webpack(webPackConfig)
+  const serverConfig = { port: PORT, hot: true }
+  app.use(webpackDevMiddleware(compiler, serverConfig))
+  app.use(webpackHotMiddleware(compiler))
 } else {
   app.use((req, res, next) => {
-    req.hashManifest = getManifest();
-    next();
-  });
-  app.use(helmet());
-  app.use(helmet.permittedCrossDomainPolicies());
-  app.disable('x-powered-by');
+    req.hashManifest = getManifest()
+    next()
+  })
+  app.use(helmet())
+  app.use(helmet.permittedCrossDomainPolicies())
+  app.disable('x-powered-by')
 }
 
 const setResponse = (html, preloadedState, manifest) => {
-  const mainStyles = manifest ? manifest['main.css'] : '/assets/app.css';
-  const mainBuild = manifest ? manifest['main.js'] : '/assets/app.js';
-  const vendorBuild = manifest ? manifest['vendors.js'] : 'assets/vendor.js';
+  const mainStyles = manifest ? manifest['main.css'] : '/assets/app.css'
+  const mainBuild = manifest ? manifest['main.js'] : '/assets/app.js'
+  const vendorBuild = manifest ? manifest['vendors.js'] : 'assets/vendor.js'
   return (
     `
       <!DOCTYPE html>
@@ -64,12 +64,12 @@ const setResponse = (html, preloadedState, manifest) => {
           <script src="${vendorBuild}" type="text/javascript"></script>
         </body>
       </html>`
-  );
-};
+  )
+}
 
 const renderApp = (req, res) => {
-  const store = createStore(reducer, initialState);
-  const preloadedState = store.getState();
+  const store = createStore(reducer, initialState)
+  const preloadedState = store.getState()
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
@@ -79,12 +79,12 @@ const renderApp = (req, res) => {
       </StaticRouter>
     </Provider>
   )
-  res.send(setResponse(html, preloadedState, req.hashManifest));
-};
+  res.send(setResponse(html, preloadedState, req.hashManifest))
+}
 
-app.get('*', renderApp);
+app.get('*', renderApp)
 
 app.listen(PORT, (err) => {
-  if (err) console.log(err);
-  else console.log(`${ENV} server running on Port ${PORT}`);
-});
+  if (err) console.log(err)
+  else console.log(`${ENV} server running on Port ${PORT}`)
+})
