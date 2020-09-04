@@ -61,5 +61,13 @@
     "sass-loader": "^7.3.1",
     "style-loader": "^0.23.1",
     "webpack-manifest-plugin": "^2.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarGDev/Integracion-Backend-Frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CarGDev/Integracion-Backend-Frontend/issues"
+  },
+  "homepage": "https://github.com/CarGDev/Integracion-Backend-Frontend#readme"
 }
